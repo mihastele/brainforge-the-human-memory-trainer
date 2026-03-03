@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description"
+        content="BrainForge — AI-powered daily brain training with memory techniques, logic puzzles, mental math, and mindfulness exercises.">
+    <meta name="theme-color" content="#6c5ce7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>BrainForge — Brain Training</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- ═══════ Header ═══════ -->
+    <header id="app-header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">🧠</span>
+                <h1>BrainForge</h1>
+            </div>
+            <p class="tagline">Daily Brain Training</p>
+        </div>
+        <div class="header-right">
+            <button id="btn-stats" class="icon-btn" title="Stats">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="12" width="4" height="9" rx="1" />
+                    <rect x="10" y="7" width="4" height="14" rx="1" />
+                    <rect x="17" y="3" width="4" height="18" rx="1" />
+                </svg>
+            </button>
+            <button id="btn-library" class="icon-btn" title="Document Library">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
+                    <line x1="8" y1="7" x2="16" y2="7" />
+                    <line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ═══════ Category Pills ═══════ -->
+    <nav id="category-bar">
+        <div class="category-scroll">
+            <button class="cat-pill active" data-category="all">
+                <span class="cat-emoji">✨</span> All
+            </button>
+            <button class="cat-pill" data-category="memory">
+                <span class="cat-emoji">🧩</span> Memory
+            </button>
+            <button class="cat-pill" data-category="mental_math">
+                <span class="cat-emoji">🔢</span> Math
+            </button>
+            <button class="cat-pill" data-category="logic">
+                <span class="cat-emoji">♟️</span> Logic
+            </button>
+            <button class="cat-pill" data-category="vocabulary">
+                <span class="cat-emoji">📖</span> Vocab
+            </button>
+            <button class="cat-pill" data-category="mindfulness">
+                <span class="cat-emoji">🧘</span> Focus
+            </button>
+            <button class="cat-pill" data-category="cognitive">
+                <span class="cat-emoji">⚡</span> Cognitive
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════ Main Content ═══════ -->
+    <main id="main-content">
+        <!-- Document card -->
+        <article id="document-card" class="glass-card">
+            <div id="doc-meta" class="doc-meta">
+                <span id="doc-badge" class="category-badge"></span>
+                <span id="doc-date" class="doc-date"></span>
+                <span id="doc-new-badge" class="new-badge" style="display:none;">✨ Fresh</span>
+            </div>
+            <div id="doc-content" class="doc-content">
+                <div class="welcome-placeholder">
+                    <div class="pulse-brain">🧠</div>
+                    <h2>Welcome to BrainForge</h2>
+                    <p>Your AI-powered brain training companion. Let's generate your first training document!</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- ═══════ Floating Action Button ═══════ -->
+    <button id="btn-generate" class="fab" title="Generate New Document">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path
+                d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.15 2.15m8.5 8.5l2.15 2.15M5.6 18.4l2.15-2.15m8.5-8.5l2.15-2.15" />
+        </svg>
+        <span class="fab-label">Generate</span>
+    </button>
+
+    <!-- ═══════ Loading Overlay ═══════ -->
+    <div id="loading-overlay" class="loading-overlay" style="display:none;">
+        <div class="loader-container">
+            <div class="neural-loader">
+                <div class="neuron n1"></div>
+                <div class="neuron n2"></div>
+                <div class="neuron n3"></div>
+                <div class="neuron n4"></div>
+                <div class="synapse s1"></div>
+                <div class="synapse s2"></div>
+                <div class="synapse s3"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Generating your brain training...</p>
+        </div>
+    </div>
+
+    <!-- ═══════ Library Modal ═══════ -->
+    <div id="library-modal" class="modal" style="display:none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>📚 Document Library</h2>
+                <button class="modal-close" id="close-library">&times;</button>
+            </div>
+            <div id="library-list" class="library-list">
+                <p class="muted">Loading documents...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ Stats Modal ═══════ -->
+    <div id="stats-modal" class="modal" style="display:none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>📊 Training Stats</h2>
+                <button class="modal-close" id="close-stats">&times;</button>
+            </div>
+            <div id="stats-content" class="stats-content">
+                <p class="muted">Loading stats...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
