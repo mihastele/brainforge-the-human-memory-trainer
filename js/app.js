@@ -384,9 +384,16 @@ FORMATTING RULES:
 
         // Render markdown content safely with DOMPurify
         const rawHtml = marked.parse(doc.content || '');
-        const cleanHtml = typeof DOMPurify !== 'undefined'
-            ? DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } })
-            : rawHtml;
+        let cleanHtml;
+        if (typeof DOMPurify !== 'undefined') {
+            cleanHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
+        } else {
+            // Fallback: strip all HTML tags if DOMPurify failed to load
+            const tmp = document.createElement('div');
+            tmp.innerHTML = rawHtml;
+            cleanHtml = escapeHtml(tmp.textContent || tmp.innerText || '');
+            cleanHtml = '<pre style="white-space:pre-wrap;">' + cleanHtml + '</pre>';
+        }
         docContent.innerHTML = cleanHtml;
 
         // Smooth scroll to top
@@ -436,7 +443,12 @@ FORMATTING RULES:
         requestAnimationFrame(() => toast.classList.add('toast-visible'));
         setTimeout(() => {
             toast.classList.remove('toast-visible');
-            toast.addEventListener('transitionend', () => toast.remove());
+            // Fallback removal in case transitionend doesn't fire
+            const fallback = setTimeout(() => toast.remove(), 500);
+            toast.addEventListener('transitionend', () => {
+                clearTimeout(fallback);
+                toast.remove();
+            });
         }, 3000);
     }
 
@@ -494,7 +506,7 @@ FORMATTING RULES:
             let doc;
             if (useBackend) {
                 const numId = parseInt(id, 10);
-                if (!numId || numId <= 0) throw new Error('Invalid document ID');
+                if (isNaN(numId) || numId <= 0) throw new Error('Invalid document ID');
                 const res = await fetch(API.documents + '?action=get&id=' + encodeURIComponent(numId));
                 doc = await res.json();
                 if (doc.error) throw new Error(doc.error);
