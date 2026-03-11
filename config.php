@@ -1,24 +1,26 @@
 <?php
 /**
  * Brain Training PWA - Configuration
+ * Values are read from environment variables (for Docker) with sensible defaults.
+ * For manual setup, either set environment variables or edit the defaults below.
  */
 
 // ─── MySQL Database ───────────────────────────────────────────
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'brain_training');
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_NAME', getenv('DB_NAME') ?: 'brain_training');
 
 // ─── AIMLAPI Configuration ───────────────────────────────────
 define('AIMLAPI_BASE_URL', 'https://api.aimlapi.com/v1/chat/completions');
-define('AIMLAPI_KEY', 'YOUR_AIMLAPI_KEY_HERE'); // <-- Replace with your key
+define('AIMLAPI_KEY', getenv('AIMLAPI_KEY') ?: 'YOUR_AIMLAPI_KEY_HERE');
 
 // Model: Mistral 7B Instruct — excellent quality/price ratio
-define('AIMLAPI_MODEL', 'mistralai/Mistral-7B-Instruct-v0.2');
+define('AIMLAPI_MODEL', getenv('AIMLAPI_MODEL') ?: 'mistralai/Mistral-7B-Instruct-v0.2');
 
 // ─── App Settings ─────────────────────────────────────────────
-define('NEW_GENERATION_CHANCE', 30); // % chance to generate new vs serve past
-define('DOCUMENTS_PER_PAGE', 20);
+define('NEW_GENERATION_CHANCE', (int)(getenv('NEW_GENERATION_CHANCE') ?: 30));
+define('DOCUMENTS_PER_PAGE', (int)(getenv('DOCUMENTS_PER_PAGE') ?: 20));
 
 // ─── Content Categories ───────────────────────────────────────
 define('CATEGORIES', json_encode([

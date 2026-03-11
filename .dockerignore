@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.example
+.env.local
+docker-compose.yml
+docker-data/
+README.md
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
