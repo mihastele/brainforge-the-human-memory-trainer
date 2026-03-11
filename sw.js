@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brainforge-v1';
+const CACHE_NAME = 'brainforge-v2';
 const SHELL_ASSETS = [
     '/',
     '/index.html',
@@ -29,13 +29,18 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
     const url = new URL(e.request.url);
 
-    // API calls: always go to network
-    if (url.pathname.startsWith('/api/')) {
-        e.respondWith(fetch(e.request));
+    // API calls and external requests: always go to network
+    if (url.pathname.startsWith('/api/') || url.origin !== self.location.origin) {
+        e.respondWith(fetch(e.request).catch(() =>
+            new Response(JSON.stringify({ error: 'Offline' }), {
+                status: 503,
+                headers: { 'Content-Type': 'application/json' },
+            })
+        ));
         return;
     }
 
-    // Shell assets: cache-first
+    // Shell assets: cache-first with network fallback
     e.respondWith(
         caches.match(e.request).then((cached) => cached || fetch(e.request))
     );
